@@ -1,14 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
+import PaginationComponent from "./components/PaginationComponent";
+
 
 function App() {
+  
   return (
-    <div >
- <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+    <div>
+     {/* <Table/> */}
+      <PaginationComponent/>
     </div>
   );
-}
+} 
 
 export default App;
