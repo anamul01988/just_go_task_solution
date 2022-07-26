@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
+import TableHeader from "./TableHeader";
 const renderData = (data) => {
   console.log(data);
   return (
-    <>
+   <div className="mt-3">
+     <h1 className="fs-3 fw-bold mb-3">User List</h1>
+      <TableHeader/>
      <div class="table-responsive">
         <table class="table">
           <thead>
@@ -41,7 +44,7 @@ const renderData = (data) => {
          {/* {data.slice(0, 50).map((todo, index) => {
             return <th key={index}>{todo.title}</th>;
           })} */}
-    </>
+   </div>
   );
 };
 

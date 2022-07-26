@@ -6,7 +6,7 @@ import PaginationComponent from "./components/PaginationComponent";
 function App() {
   
   return (
-    <div>
+    <div className="container">
      {/* <Table/> */}
       <PaginationComponent/>
     </div>
