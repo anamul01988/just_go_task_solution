@@ -2,28 +2,16 @@ import React, { useState } from "react";
 import "./ToggleSwitch.module.css";
 function ToggleSwitcher() {
   const [checked, setChecked] = useState(false);
+  const [switcher, setSwitcher] = useState(false);
   const handleChange = (nextChecked) => {
     setChecked(nextChecked);
   };
   return (
     <div className="example">
-      <p>
-        Tile View{" "}
-        <span>
-          {checked ? (
-            "on"
-          ) : (
-            "off"
-          )}
-        </span>
-        .
-        <switch
-          className="react-switch"
-          onChange={handleChange}
-          checked={checked}
-          required
-        />
-      </p>
+        <label class="switch">
+                  <input onClick={setSwitcher(!switcher)} type="checkbox" />
+                  <span class="slider round"></span>
+                </label>
     </div>
   );
 }

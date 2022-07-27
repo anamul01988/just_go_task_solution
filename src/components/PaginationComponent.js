@@ -62,6 +62,7 @@ function PaginationComponent({ tableData, setTableData }) {
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
   const [searchData, setSearchData] = useState(false);
   const [radioData, setradioData] = useState(false);
+  const [switcher, setSwitcher] = useState(null);
 
   const handleClick = (event) => {
     setcurrentPage(Number(event.target.id));
@@ -79,20 +80,35 @@ function PaginationComponent({ tableData, setTableData }) {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
-  const searchItems = radioData ? data?.filter((item) =>  item.gender === radioData).filter((it) => searchData ? it.name.first.includes(searchData) || it.name.last.includes(searchData) || it?.email.includes(searchData) || it?.registered.date.includes(searchData) : it).slice(indexOfFirstItem, indexOfLastItem) : searchData && data?.filter((item) => item.name.first.includes(searchData) || item.name.last.includes(searchData) || item?.email.includes(searchData) || item?.registered.date.includes(searchData));
-  console.log('searchItemssearchItemssearchItems', searchItems);
+  const searchItems = radioData
+    ? data
+        ?.filter((item) => item.gender === radioData)
+        .filter((it) =>
+          searchData
+            ? it.name.first.includes(searchData) ||
+              it.name.last.includes(searchData) ||
+              it?.email.includes(searchData) ||
+              it?.registered.date.includes(searchData)
+            : it
+        )
+        .slice(indexOfFirstItem, indexOfLastItem)
+    : searchData &&
+      data?.filter(
+        (item) =>
+          item.name.first.includes(searchData) ||
+          item.name.last.includes(searchData) ||
+          item?.email.includes(searchData) ||
+          item?.registered.date.includes(searchData)
+      );
+  console.log("searchItemssearchItemssearchItems", searchItems);
   useEffect(() => {
     if (searchItems) {
       setPaginationData(searchItems);
-    }
-    else if (currentPage) {
+    } else if (currentPage) {
       setPaginationData(currentItems);
-    }
-
-    else {
+    } else {
       setPaginationData(data);
     }
-
   }, [data, currentPage, searchData, radioData]);
 
   // useEffect(() => {
@@ -128,7 +144,7 @@ function PaginationComponent({ tableData, setTableData }) {
 
       .then((data) => {
         console.log(data.results);
-        setData(data.results)
+        setData(data.results);
       });
   }, []);
 
@@ -149,21 +165,7 @@ function PaginationComponent({ tableData, setTableData }) {
       setminPageNumberLimit(minPageNumberLimit - pageNumberLimit);
     }
   };
-
-  // let pageIncrementBtn = null;
-  // if (pages.length > maxPageNumberLimit) {
-  //   pageIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>;
-  // }
-
-  // let pageDecrementBtn = null;
-  // if (minPageNumberLimit >= 1) {
-  //   pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
-  // }
-
-  // const handleLoadMore = () => {
-  //   setitemsPerPage(itemsPerPage + 5);
-  // };
-
+  console.log(switcher);
   return (
     <div>
       <>
@@ -230,81 +232,89 @@ function PaginationComponent({ tableData, setTableData }) {
                 </div>
               </div>
               <div class="col-md-4 col-12">
-                {/* <div className="toggle">
-       <input class="toggle-input" type="checkbox" id="switch" />
-          <label class="toggle-label" for="switch">Toggle</label>
-       </div> */}
-                <ToggleSwitcher />
-
+                <label class="switch">
+                  <input
+                    checked={switcher}
+                    onChange={(e) => setSwitcher(e.target.checked)}
+                    type="checkbox"
+                  />
+                  <span class="slider round"></span>
+                </label>
+                {/* <ToggleSwitcher /> */}
               </div>
             </div>
           </div>
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  {/* <th>Index</th> */}
-                  <th>Name</th>
-                  <th>Registration Date</th>
-                  <th>Username</th>
-                </tr>
-              </thead>
-              {/* {data.slice(0, 50).map((todo, index) => { */}
-              <tbody>
-                {paginationData?.slice(0, 50).map((todo, index) => (
-                  <>
+          {switcher ? (
+            <>
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
                     <tr>
-                      {/* <td>{index}</td> */}
-                      <td>
-                        <div className="tableData d-flex align-items-center">
-                          <img className="" src={todo.picture.large} alt="" />
-                          <div className="ms-3">
-                            <h5 className="bold">
-                              {todo.name.first},{todo.name.last}
-                            </h5>
-                            <p>{todo.email}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{todo.registered.date}</td>
-                      <td>{todo.login.username}</td>
+                      {/* <th>Index</th> */}
+                      <th>Name</th>
+                      <th>Registration Date</th>
+                      <th>Username</th>
                     </tr>
-                  </>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          {/* {data.slice(0, 50).map((todo, index) => {
-            return <th key={index}>{todo.title}</th>;
-          })} */}
-        </div>
-        {/* <h1>Todo List</h1> <br /> */}
-        {/* {renderData(currentItems)} */}
-        <ul className="pageNumbers">
-          <li>
-            <button
-              onClick={handlePrevbtn}
-              disabled={currentPage == pages[0] ? true : false}
-            >
-              Prev
-            </button>
-          </li>
-          {/* {pageDecrementBtn} */}
-          {renderPageNumbers}
-          {/* {pageIncrementBtn} */}
+                  </thead>
+                  {/* {data.slice(0, 50).map((todo, index) => { */}
+                  <tbody>
+                    {paginationData?.slice(0, 50).map((todo, index) => (
+                      <>
+                        <tr>
+                          {/* <td>{index}</td> */}
+                          <td>
+                            <div className="tableData d-flex align-items-center">
+                              <img
+                                className=""
+                                src={todo.picture.large}
+                                alt=""
+                              />
+                              <div className="ms-3">
+                                <h5 className="bold">
+                                  {todo.name.first},{todo.name.last}
+                                </h5>
+                                <p>{todo.email}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td>{todo.registered.date}</td>
+                          <td>{todo.login.username}</td>
+                        </tr>
+                      </>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <ul className="pageNumbers mt-2 mb-4">
+                <li>
+                  <button
+                    onClick={handlePrevbtn}
+                    disabled={currentPage == pages[0] ? true : false}
+                  >
+                    Prev
+                  </button>
+                </li>
 
-          <li>
-            <button
-              onClick={handleNextbtn}
-              disabled={currentPage == pages[pages?.length - 1] ? true : false}
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-        {/* <button onClick={handleLoadMore} className="loadmore">
-        Load More
-      </button> */}
+                {renderPageNumbers}
+
+                <li>
+                  <button
+                    onClick={handleNextbtn}
+                    disabled={
+                      currentPage == pages[pages?.length - 1] ? true : false
+                    }
+                  >
+                    Next
+                  </button>
+                </li>
+              </ul>
+            </>
+          ) : (
+            <>
+              <h3>fuck</h3>
+            </>
+          )}
+        </div>
       </>
     </div>
   );
