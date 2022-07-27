@@ -3,52 +3,9 @@ import "./style.css";
 import TableHeader from "./TableHeader";
 import "./TableHeader.module.css";
 import ToggleSwitcher from "./ToggleSwitcher";
-// const renderData = (data) => {
-//   console.log(data);
-//   return (
-//    <div className="mt-3">
-//      <h1 className="fs-3 fw-bold mb-3">User List</h1>
-//       <TableHeader/>
-//      <div class="table-responsive">
-//         <table class="table">
-//           <thead>
-//             <tr>
-//               {/* <th>Index</th> */}
-//               <th>Name</th>
-//               <th>Registration Date</th>
-//               <th>Username</th>
-//             </tr>
-//           </thead>
-//           {/* {data.slice(0, 50).map((todo, index) => { */}
-//           <tbody>
-//             {data?.slice(0, 50).map((todo, index) => (
-//               <>
-//                 <tr>
-//                   {/* <td>{index}</td> */}
-//                   <td>
-//                     <div className="tableData d-flex align-items-center">
-//                       <img className="" src={todo.picture.large} alt="" />
-//                       <div className="ms-3">
-//                         <h5 className="bold">{todo.name.first},{todo.name.last}</h5>
-//                         <p>{todo.email}</p>
-//                       </div>
-//                     </div>
-//                   </td>
-//                   <td>{todo.registered.date}</td>
-//                   <td>{todo.login.username}</td>
-//                 </tr>
-//               </>
-//             ))}
-
-//           </tbody>
-//         </table>
-//       </div>
-//          {/* {data.slice(0, 50).map((todo, index) => {
-//             return <th key={index}>{todo.title}</th>;
-//           })} */}
-//    </div>
-//   );
-// };
+import { FaSearch } from 'react-icons/fa';
+import { FaGreaterThan } from 'react-icons/fa';
+import { FaLessThan } from 'react-icons/fa';
 
 function PaginationComponent({ tableData, setTableData }) {
   const [data, setData] = useState([]);
@@ -111,9 +68,7 @@ function PaginationComponent({ tableData, setTableData }) {
     }
   }, [data, currentPage, searchData, radioData]);
 
-  // useEffect(() => {
-  //   setPaginationData(currentItems)
-  // }, [currentPage]);
+
   console.log(currentItems);
 
   const renderPageNumbers = pages?.map((number) => {
@@ -138,7 +93,7 @@ function PaginationComponent({ tableData, setTableData }) {
   });
 
   useEffect(() => {
-    // fetch("https://jsonplaceholder.typicode.com/todos")
+   
     fetch("https://randomuser.me/api/?page=3&results=100&seed=abc")
       .then((response) => response.json())
 
@@ -174,14 +129,13 @@ function PaginationComponent({ tableData, setTableData }) {
           {/* <TableHeader /> */}
           <div>
             <div class="row height fw-bold d-flex justify-content-center align-items-center">
-              <div class="col-md-4 col-12">
+              <div class="col-md-4 col-12 mt-2">
                 <div class="form">
-                  {/* <i class="fa fa-search"></i> */}
-                  <i class="fa-solid fa-magnifying-glass"></i>
+                   <FaSearch class="icon-search"/>
                   <input
                     type="text"
                     class="form-control form-input"
-                    placeholder="Search anything..."
+                    placeholder="Search..."
                     onChange={(e) => setSearchData(e.target.value)}
                   />
                   <span class="left-pan">
@@ -189,7 +143,7 @@ function PaginationComponent({ tableData, setTableData }) {
                   </span>
                 </div>
               </div>
-              <div class="col-md-4 col-12">
+              <div class="col-md-4 col-12 mt-2">
                 <h3 class="inline  mx-2">Filter By :</h3>
                 <div class="form-check form-check-inline">
                   <input
@@ -231,8 +185,10 @@ function PaginationComponent({ tableData, setTableData }) {
                   </label>
                 </div>
               </div>
-              <div class="col-md-4 col-12">
+              <div class="col-md-4 col-12 mt-2 d-flex justify-content-end">
+              <label class="mr-2"> Tile View  </label>
                 <label class="switch">
+                
                   <input
                     checked={switcher}
                     onChange={(e) => setSwitcher(e.target.checked)}
@@ -244,40 +200,40 @@ function PaginationComponent({ tableData, setTableData }) {
               </div>
             </div>
           </div>
-          {switcher ? (
+          {!switcher ? (
             <>
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
+              <div class="table-responsive pt-4">
+                <table class="table ">
+                  <thead  class="table-head border-0 border-white">
                     <tr>
-                      {/* <th>Index</th> */}
+                  
                       <th>Name</th>
                       <th>Registration Date</th>
                       <th>Username</th>
                     </tr>
                   </thead>
-                  {/* {data.slice(0, 50).map((todo, index) => { */}
+                
                   <tbody>
                     {paginationData?.slice(0, 50).map((todo, index) => (
                       <>
                         <tr>
-                          {/* <td>{index}</td> */}
+                       
                           <td>
-                            <div className="tableData d-flex align-items-center">
+                            <div className="tableData d-flex flex-wrap  align-items-center">
                               <img
-                                className=""
-                                src={todo.picture.large}
-                                alt=""
+                                className="rounded-circle mb-2"
+                                src={todo.picture.medium}
+                                alt="img"
                               />
                               <div className="ms-3">
-                                <h5 className="bold">
-                                  {todo.name.first},{todo.name.last}
+                                <h5 className="fw-bold sm:inline-block">
+                                  {todo.name.first},  {todo.name.last}
                                 </h5>
                                 <p>{todo.email}</p>
                               </div>
                             </div>
                           </td>
-                          <td>{todo.registered.date}</td>
+                          <td class="sm:ms-3" >{todo.registered.date}</td>
                           <td>{todo.login.username}</td>
                         </tr>
                       </>
@@ -291,7 +247,7 @@ function PaginationComponent({ tableData, setTableData }) {
                     onClick={handlePrevbtn}
                     disabled={currentPage == pages[0] ? true : false}
                   >
-                    Prev
+                    <FaLessThan/>
                   </button>
                 </li>
 
@@ -304,17 +260,69 @@ function PaginationComponent({ tableData, setTableData }) {
                       currentPage == pages[pages?.length - 1] ? true : false
                     }
                   >
-                    Next
+                    <FaGreaterThan/>
                   </button>
                 </li>
               </ul>
             </>
           ) : (
             <>
-              <h3>fuck</h3>
+          
+
+              <div class="row mt-4">
+                {paginationData?.slice(0, 50).map((todo, index) => (
+                  <div class="col-lg-4 col-md-6 col-12">
+                    {" "}
+                    <div class="card shadow-md mb-4">
+                      <div class="card-body">
+                        <div className=" d-flex align-items-center">
+                          <img
+                            className="rounded-circle"
+                            src={todo.picture.large}
+                            alt=""
+                          />
+                          <div className="ms-3">
+                            <h5 className="fw-bold">
+                              {todo.name.first},{todo.name.last}
+                            </h5>
+                            <p>{todo.email}</p>
+                            <p class="card-text fw-normal">{todo.login.username}</p>
+
+                            <p class="card-text fw-normal">{todo.registered.date}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <ul className="pageNumbers mt-2 mb-4">
+          <li>
+            <button
+              onClick={handlePrevbtn}
+              disabled={currentPage == pages[0] ? true : false}
+            >
+                <FaLessThan/>
+            </button>
+          </li>
+
+          {renderPageNumbers}
+
+          <li>
+            <button
+              onClick={handleNextbtn}
+              disabled={currentPage == pages[pages?.length - 1] ? true : false}
+            >
+             <FaGreaterThan/>
+            </button>
+          </li>
+        </ul>
             </>
+
           )}
         </div>
+
+     
       </>
     </div>
   );

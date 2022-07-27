@@ -1,14 +1,17 @@
+.table-head{
+  background: #d2cdcd38;
+}
 .form{
 
   position: relative;
 }
 
-.form .searched{
+.form .icon-search{
 
   position: absolute;
   top:20px;
   left: 20px;
-  color: #9ca3af;
+  color: #090a0a;
 
 }
 
