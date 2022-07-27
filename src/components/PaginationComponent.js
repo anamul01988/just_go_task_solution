@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
 import TableHeader from "./TableHeader";
+import "./TableHeader.module.css";
+import ToggleSwitcher from "./ToggleSwitcher";
 // const renderData = (data) => {
 //   console.log(data);
 //   return (
@@ -37,7 +39,7 @@ import TableHeader from "./TableHeader";
 //                 </tr>
 //               </>
 //             ))}
-        
+
 //           </tbody>
 //         </table>
 //       </div>
@@ -48,7 +50,7 @@ import TableHeader from "./TableHeader";
 //   );
 // };
 
-function PaginationComponent({tableData, setTableData}) {
+function PaginationComponent({ tableData, setTableData }) {
   const [data, setData] = useState([]);
   const [paginationData, setPaginationData] = useState([]);
 
@@ -58,6 +60,8 @@ function PaginationComponent({tableData, setTableData}) {
   const [pageNumberLimit, setpageNumberLimit] = useState(5);
   const [maxPageNumberLimit, setmaxPageNumberLimit] = useState(5);
   const [minPageNumberLimit, setminPageNumberLimit] = useState(0);
+  const [searchData, setSearchData] = useState(false);
+  const [radioData, setradioData] = useState(false);
 
   const handleClick = (event) => {
     setcurrentPage(Number(event.target.id));
@@ -75,27 +79,42 @@ function PaginationComponent({tableData, setTableData}) {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
- 
+  const searchItems = radioData ? data?.filter((item) =>  item.gender === radioData).filter((it) => searchData ? it.name.first.includes(searchData) || it.name.last.includes(searchData) || it?.email.includes(searchData) || it?.registered.date.includes(searchData) : it).slice(indexOfFirstItem, indexOfLastItem) : searchData && data?.filter((item) => item.name.first.includes(searchData) || item.name.last.includes(searchData) || item?.email.includes(searchData) || item?.registered.date.includes(searchData));
+  console.log('searchItemssearchItemssearchItems', searchItems);
   useEffect(() => {
-    setPaginationData(currentItems)
-  }, [currentItems]);
-  console.log(paginationData)
+    if (searchItems) {
+      setPaginationData(searchItems);
+    }
+    else if (currentPage) {
+      setPaginationData(currentItems);
+    }
+
+    else {
+      setPaginationData(data);
+    }
+
+  }, [data, currentPage, searchData, radioData]);
+
+  // useEffect(() => {
+  //   setPaginationData(currentItems)
+  // }, [currentPage]);
+  console.log(currentItems);
 
   const renderPageNumbers = pages?.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
       return (
-     <div className="numbers">
-        <div className="pagiNumber">
-          <li
-          key={number}
-          id={number}
-          onClick={handleClick}
-          className={currentPage == number ? "active" : null}
-        >
-          {number}
-        </li>
-      </div>
-     </div>
+        <div className="numbers">
+          <div className="pagiNumber">
+            <li
+              key={number}
+              id={number}
+              onClick={handleClick}
+              className={currentPage == number ? "active" : null}
+            >
+              {number}
+            </li>
+          </div>
+        </div>
       );
     } else {
       return null;
@@ -106,7 +125,7 @@ function PaginationComponent({tableData, setTableData}) {
     // fetch("https://jsonplaceholder.typicode.com/todos")
     fetch("https://randomuser.me/api/?page=3&results=100&seed=abc")
       .then((response) => response.json())
-    
+
       .then((data) => {
         console.log(data.results);
         setData(data.results)
@@ -150,7 +169,76 @@ function PaginationComponent({tableData, setTableData}) {
       <>
         <div className="mt-3">
           <h1 className="fs-3 fw-bold mb-3">User List</h1>
-          <TableHeader />
+          {/* <TableHeader /> */}
+          <div>
+            <div class="row height fw-bold d-flex justify-content-center align-items-center">
+              <div class="col-md-4 col-12">
+                <div class="form">
+                  {/* <i class="fa fa-search"></i> */}
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input
+                    type="text"
+                    class="form-control form-input"
+                    placeholder="Search anything..."
+                    onChange={(e) => setSearchData(e.target.value)}
+                  />
+                  <span class="left-pan">
+                    <i class="fa fa-microphone"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4 col-12">
+                <h3 class="inline  mx-2">Filter By :</h3>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio1"
+                    value="all"
+                    onChange={(e) => setradioData(null)}
+                  />
+                  <label class="form-check-label" for="inlineRadio1">
+                    All
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio2"
+                    value="male"
+                    onChange={(e) => setradioData(e.target.value)}
+                  />
+                  <label class="form-check-label" for="inlineRadio2">
+                    Male
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inlineRadioOptions"
+                    id="inlineRadio3"
+                    value="female"
+                    onChange={(e) => setradioData(e.target.value)}
+                  />
+                  <label class="form-check-label" for="inlineRadio3">
+                    Female
+                  </label>
+                </div>
+              </div>
+              <div class="col-md-4 col-12">
+                {/* <div className="toggle">
+       <input class="toggle-input" type="checkbox" id="switch" />
+          <label class="toggle-label" for="switch">Toggle</label>
+       </div> */}
+                <ToggleSwitcher />
+
+              </div>
+            </div>
+          </div>
           <div class="table-responsive">
             <table class="table">
               <thead>
