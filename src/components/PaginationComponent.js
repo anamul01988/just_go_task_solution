@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
-import TableHeader from "./TableHeader";
 import "./TableHeader.module.css";
-import ToggleSwitcher from "./ToggleSwitcher";
 import { FaSearch } from 'react-icons/fa';
 import { FaGreaterThan } from 'react-icons/fa';
 import { FaLessThan } from 'react-icons/fa';
@@ -126,7 +124,6 @@ function PaginationComponent({ tableData, setTableData }) {
       <>
         <div className="mt-3">
           <h1 className="fs-3 fw-bold mb-3">User List</h1>
-          {/* <TableHeader /> */}
           <div>
             <div class="row height fw-bold d-flex justify-content-center align-items-center">
               <div class="col-md-4 col-12 mt-2">
@@ -196,7 +193,7 @@ function PaginationComponent({ tableData, setTableData }) {
                   />
                   <span class="slider round"></span>
                 </label>
-                {/* <ToggleSwitcher /> */}
+             
               </div>
             </div>
           </div>
