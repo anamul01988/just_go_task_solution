@@ -1,55 +1,56 @@
 import React, { useEffect, useState } from "react";
 import "./style.css";
 import TableHeader from "./TableHeader";
-const renderData = (data) => {
-  console.log(data);
-  return (
-   <div className="mt-3">
-     <h1 className="fs-3 fw-bold mb-3">User List</h1>
-      <TableHeader/>
-     <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              {/* <th>Index</th> */}
-              <th>Name</th>
-              <th>Registration Date</th>
-              <th>Username</th>
-            </tr>
-          </thead>
-          {/* {data.slice(0, 50).map((todo, index) => { */}
-          <tbody>
-            {data?.slice(0, 50).map((todo, index) => (
-              <>
-                <tr>
-                  {/* <td>{index}</td> */}
-                  <td>
-                    <div className="tableData d-flex align-items-center">
-                      <img className="" src={todo.picture.large} alt="" />
-                      <div className="ms-3">
-                        <h5 className="bold">{todo.name.first},{todo.name.last}</h5>
-                        <p>{todo.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>{todo.registered.date}</td>
-                  <td>{todo.login.username}</td>
-                </tr>
-              </>
-            ))}
+// const renderData = (data) => {
+//   console.log(data);
+//   return (
+//    <div className="mt-3">
+//      <h1 className="fs-3 fw-bold mb-3">User List</h1>
+//       <TableHeader/>
+//      <div class="table-responsive">
+//         <table class="table">
+//           <thead>
+//             <tr>
+//               {/* <th>Index</th> */}
+//               <th>Name</th>
+//               <th>Registration Date</th>
+//               <th>Username</th>
+//             </tr>
+//           </thead>
+//           {/* {data.slice(0, 50).map((todo, index) => { */}
+//           <tbody>
+//             {data?.slice(0, 50).map((todo, index) => (
+//               <>
+//                 <tr>
+//                   {/* <td>{index}</td> */}
+//                   <td>
+//                     <div className="tableData d-flex align-items-center">
+//                       <img className="" src={todo.picture.large} alt="" />
+//                       <div className="ms-3">
+//                         <h5 className="bold">{todo.name.first},{todo.name.last}</h5>
+//                         <p>{todo.email}</p>
+//                       </div>
+//                     </div>
+//                   </td>
+//                   <td>{todo.registered.date}</td>
+//                   <td>{todo.login.username}</td>
+//                 </tr>
+//               </>
+//             ))}
         
-          </tbody>
-        </table>
-      </div>
-         {/* {data.slice(0, 50).map((todo, index) => {
-            return <th key={index}>{todo.title}</th>;
-          })} */}
-   </div>
-  );
-};
+//           </tbody>
+//         </table>
+//       </div>
+//          {/* {data.slice(0, 50).map((todo, index) => {
+//             return <th key={index}>{todo.title}</th>;
+//           })} */}
+//    </div>
+//   );
+// };
 
 function PaginationComponent({tableData, setTableData}) {
   const [data, setData] = useState([]);
+  const [paginationData, setPaginationData] = useState([]);
 
   const [currentPage, setcurrentPage] = useState(1);
   const [itemsPerPage, setitemsPerPage] = useState(10);
@@ -75,7 +76,11 @@ function PaginationComponent({tableData, setTableData}) {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
  
- 
+  useEffect(() => {
+    setPaginationData(currentItems)
+  }, [currentItems]);
+  console.log(paginationData)
+
   const renderPageNumbers = pages?.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
       return (
@@ -126,25 +131,67 @@ function PaginationComponent({tableData, setTableData}) {
     }
   };
 
-  let pageIncrementBtn = null;
-  if (pages.length > maxPageNumberLimit) {
-    pageIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>;
-  }
+  // let pageIncrementBtn = null;
+  // if (pages.length > maxPageNumberLimit) {
+  //   pageIncrementBtn = <li onClick={handleNextbtn}> &hellip; </li>;
+  // }
 
-  let pageDecrementBtn = null;
-  if (minPageNumberLimit >= 1) {
-    pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
-  }
+  // let pageDecrementBtn = null;
+  // if (minPageNumberLimit >= 1) {
+  //   pageDecrementBtn = <li onClick={handlePrevbtn}> &hellip; </li>;
+  // }
 
   // const handleLoadMore = () => {
   //   setitemsPerPage(itemsPerPage + 5);
   // };
 
   return (
-    <div >
+    <div>
       <>
+        <div className="mt-3">
+          <h1 className="fs-3 fw-bold mb-3">User List</h1>
+          <TableHeader />
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  {/* <th>Index</th> */}
+                  <th>Name</th>
+                  <th>Registration Date</th>
+                  <th>Username</th>
+                </tr>
+              </thead>
+              {/* {data.slice(0, 50).map((todo, index) => { */}
+              <tbody>
+                {paginationData?.slice(0, 50).map((todo, index) => (
+                  <>
+                    <tr>
+                      {/* <td>{index}</td> */}
+                      <td>
+                        <div className="tableData d-flex align-items-center">
+                          <img className="" src={todo.picture.large} alt="" />
+                          <div className="ms-3">
+                            <h5 className="bold">
+                              {todo.name.first},{todo.name.last}
+                            </h5>
+                            <p>{todo.email}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>{todo.registered.date}</td>
+                      <td>{todo.login.username}</td>
+                    </tr>
+                  </>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {/* {data.slice(0, 50).map((todo, index) => {
+            return <th key={index}>{todo.title}</th>;
+          })} */}
+        </div>
         {/* <h1>Todo List</h1> <br /> */}
-        {renderData(currentItems)}
+        {/* {renderData(currentItems)} */}
         <ul className="pageNumbers">
           <li>
             <button
